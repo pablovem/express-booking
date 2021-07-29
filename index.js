@@ -67,7 +67,36 @@ app.post('/api/users', (req, res) => {
   }  
 });
 
+// update an existing user by id
+app.patch('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  // validate data
+  const userSchema = joi.object({
+    name: joi.string().min(3).max(42),
+    lastname: joi.string().min(3).max(42),
+    email: joi.string().email()
+  });
+  const result = userSchema.validate(body);
+  const { value, error } = result;
+  const valid = error == null;
+  if (!valid) {
+    res.status(400).json({ success: false, message: 'Validation error', data: value, error: error });
+  } else {
+    const exists = db.get('users').find({ _id: id }).value(); // query
+    if (!exists) {
+      res.status(404).json({ success: false, message: 'User not found' });
+    } else {
+      const name = body.name ? body.name : exists.name;
+      const lastname = body.lastname ? body.lastname : exists.lastname;
+      const email = body.email ? body.email : exists.email;
+      // db management
+      const user = db.get('users').find({ _id: id }).assign({ name: name, lastname: lastname, email: email }).write();
+      res.status(200).json({ success: true,  message: 'User has been updated', data: user });
+    }
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT}`);
 });
-
