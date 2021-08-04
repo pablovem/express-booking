@@ -106,9 +106,14 @@ app.patch('/api/users/:id', (req, res) => {
 
 // delete an existing user by id
 app.delete('/api/users/:id', (req, res) => {
-  const id = req.params.id;
-  db.get('users').remove({ _id: id }).write(); // mutation
-  res.status(200).json({ success: true, message: 'User has been deleted' });
+  const { id } = req.params
+  const exists = db.get('users').find({ _id: id }).value(); // query
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'User not found' });
+  } else {
+    db.get('users').remove({ _id: id }).write(); // mutation
+    res.status(200).json({ success: true, message: 'User has been deleted' });
+  }
 });
 
 app.listen(PORT, () => {
