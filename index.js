@@ -3,6 +3,7 @@ const lowdDB = require('lowdb');
 const FyleSync = require('lowdb/adapters/FileSync');
 const joi = require('joi');
 const { nanoid } = require('nanoid');
+const morgan = require('morgan');
 
 // Server Setup
 const PORT = 4000;
@@ -17,6 +18,7 @@ const app = express();
 
 // Global Middlewares
 app.use(express.json());
+app.use(morgan('dev'));
 
 // Users
 // fetch all users
