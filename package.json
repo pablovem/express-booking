@@ -7,13 +7,23 @@
     "dev": "nodemon index.js --ignore db.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablovem/express-booking.git"
+  },
   "author": "Pablovem <contact@pablovem.com>",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pablovem/express-booking/issues"
+  },
+  "homepage": "https://github.com/pablovem/express-booking#readme",
   "dependencies": {
     "express": "^4.17.1",
     "joi": "^17.4.1",
     "lowdb": "^1.0.0",
-    "nanoid": "^3.1.23",
+    "nanoid": "^3.1.23"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.12"
   }
 }
