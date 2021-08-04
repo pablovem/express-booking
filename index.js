@@ -30,8 +30,12 @@ app.get('/api/users', (req, res) => {
 // get an user by id
 app.get('/api/users/:id', (req, res) => {
   const { id } = req.params
-  const user = db.get('users').find({ _id: id }).value(); // query
-  res.status(200).json({ success: true, data: user });
+  const exists = db.get('users').find({ _id: id }).value(); // query
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'User not found' });
+  } else {
+    res.status(200).json({ success: true, data: exists });
+  }
 });
 
 // create new user
