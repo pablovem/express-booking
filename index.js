@@ -98,7 +98,12 @@ app.patch('/api/users/:id', (req, res) => {
   }
 });
 
-// delete an existing user
+// delete an existing user by id
+app.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  db.get('users').remove({ _id: id }).write(); // mutation
+  res.status(200).json({ success: true, message: 'User has been deleted' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT}`);
