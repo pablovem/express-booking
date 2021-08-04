@@ -73,8 +73,8 @@ app.patch('/api/users/:id', (req, res) => {
   const body = req.body;
   // validate data
   const userSchema = joi.object({
-    name: joi.string().min(3).max(42),
-    lastname: joi.string().min(3).max(42),
+    name: joi.string().min(3).max(24),
+    lastname: joi.string().min(3).max(24),
     email: joi.string().email()
   });
   const result = userSchema.validate(body);
@@ -90,12 +90,15 @@ app.patch('/api/users/:id', (req, res) => {
       const name = body.name ? body.name : exists.name;
       const lastname = body.lastname ? body.lastname : exists.lastname;
       const email = body.email ? body.email : exists.email;
+      const update = { name: name, lastname: lastname, email: email, updatedAt: Date.now() };
       // db management
-      const user = db.get('users').find({ _id: id }).assign({ name: name, lastname: lastname, email: email }).write();
+      const user = db.get('users').find({ _id: id }).assign(update).write();
       res.status(200).json({ success: true,  message: 'User has been updated', data: user });
     }
   }
 });
+
+// delete an existing user
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT}`);
