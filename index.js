@@ -117,13 +117,8 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 // Custom middleware - express error handler
-app.use((error, req, res, next) => {
-  console.log('My express error handler');
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data =  error.data;
-  res.status(status).json({ success: false, message, data });
-})
+const errorHandler = require('./middlewares/errorHandler');
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on ${PORT}`);
