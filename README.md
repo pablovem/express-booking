@@ -1,6 +1,48 @@
 # express-booking
 
-Express Booking 
+Express Booking
+
+## API Reference
+
+### Users
+
+#### Get all users
+
+```http
+  GET /api/users
+```
+
+#### Create an user
+
+```http
+  POST /api/users
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name`    | `string` | User name                  |
+| `lastname`| `string` | User lastname              |
+| `email`   | `string` | User email                 |
+| `username`| `string` | Username                   |
+| `phone`   | `string` | Phone                      |
+
+#### Update an user
+
+```http
+  PUT /api/users/:id
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name`    | `string` | User name                  |
+| `lastname`| `string` | User lastname              |
+| `email`   | `string` | User email                 |
+
+#### Delete an user
+
+```http
+  DELETE /api/users/:id
+```
 
 ## Coding Rules
 
