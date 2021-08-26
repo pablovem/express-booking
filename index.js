@@ -47,6 +47,7 @@ app.post('/api/users', (req, res) => {
     lastname: joi.string().min(3).max(24).required(),
     email: joi.string().email().required(),
     username: joi.string().min(3).max(20).alphanum().required(),
+    type: joi.string().valid('client', 'owner').required(),
     phone: joi.string().length(10).pattern(/^[0-9]+$/)
   });
   const result = userSchema.validate(body);
