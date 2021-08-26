@@ -124,6 +124,43 @@ app.get('/api/hotels', (req, res) => {
   res.status(200).json({ success: true, data: hotels });
 });
 
+// create new hotel
+app.post('/api/hotels', (req, res) => {
+  const body = req.body;
+  // data validation
+  const userSchema = joi.object({
+    name: joi.string().min(3).max(24).required(),
+    phone: joi.string().length(10).pattern(/^[0-9]+$/),
+    email: joi.string().email().required(),
+    address: joi.string().min(10).max(42).required(),
+    ownerId: joi.string().required()
+  });
+  const result = userSchema.validate(body);
+  const { value, error } = result;
+  const valid = error == null;
+  if (!valid) {
+    res.status(400).json({ success: false, message: 'Validation error', data: value, error: error });
+  } else {
+    // query if there is already an hotel with same name 
+    const exists = db.get('hotels').find({ name: body.name }).value();
+    // query if customerId is valid
+    const validOwnerId = db.get('users').find({ _id: body.ownerId, type: 'owner' }).value();
+    if (!exists && validOwnerId) {
+      // data management for hotel creation
+      const hotel = {
+        _id: nanoid(),
+        ...body, 
+        createdAt: Date.now(),
+      };
+      // db management
+      db.get('hotels').push(hotel).write(); // mutation
+      res.status(201).json({ success: true, message: 'Hotel has been created', data: hotel });
+    } else {
+      res.status(409).json({ success: false, message: 'Hotel name is already taken or owner id is not valid' });
+    }
+  }  
+});
+
 // Custom middleware - express error handler
 const errorHandler = require('./middlewares/errorHandler');
 app.use(errorHandler);
