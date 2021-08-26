@@ -11,7 +11,7 @@ const PORT = 4000;
 // Database Setup
 const adapter = new FyleSync('db.json');
 const db = lowdDB(adapter);
-db.defaults({ users: [] }).write();
+db.defaults({ users: [], hotels: [] }).write();
 
 // Express Setup
 const app = express();
@@ -115,6 +115,13 @@ app.delete('/api/users/:id', (req, res) => {
     db.get('users').remove({ _id: id }).write(); // mutation
     res.status(200).json({ success: true, message: 'User has been deleted' });
   }
+});
+
+// Hotels
+// fetch all hotels
+app.get('/api/hotels', (req, res) => {
+  const hotels = db.get('hotels').value(); // query
+  res.status(200).json({ success: true, data: hotels });
 });
 
 // Custom middleware - express error handler
